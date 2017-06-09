@@ -113,6 +113,13 @@ func main() {
 	}
 	prometheus.MustRegister(adminStatsCollector)
 
+	metricsCollector, err := collectors.NewMetricsCollector(*grafanaClient)
+	if err != nil {
+		log.Error(err)
+		os.Exit(1)
+	}
+	prometheus.MustRegister(metricsCollector)
+
 	http.Handle(*metricsPath, prometheus.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>

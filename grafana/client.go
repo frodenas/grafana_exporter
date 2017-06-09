@@ -14,18 +14,6 @@ import (
 	"github.com/prometheus/common/version"
 )
 
-type AdminStats struct {
-	AlertCount      int `json:"alert_count"`
-	DashboardCount  int `json:"dashboard_count"`
-	DatasourceCount int `json:"data_source_count"`
-	OrgCount        int `json:"org_count"`
-	PlaylistCount   int `json:"playlist_count"`
-	SnapshotCount   int `json:"db_snapshot_count"`
-	StarredCount    int `json:"starred_db_count"`
-	TagCount        int `json:"db_tag_count"`
-	UserCount       int `json:"user_count"`
-}
-
 type Client struct {
 	url        *url.URL
 	username   string
@@ -99,4 +87,40 @@ func (c *Client) GetAdminStats() (AdminStats, error) {
 	}
 
 	return adminStats, nil
+}
+
+func (c *Client) GetMetrics() (Metrics, error) {
+	var metrics Metrics
+
+	uri := c.url
+	uri.Path = "/api/metrics"
+	request, err := http.NewRequest(http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return metrics, err
+	}
+	request.Header.Set("User-Agent", "grafana_exporter "+version.Version)
+	if c.username != "" && c.password != "" {
+		request.SetBasicAuth(c.username, c.password)
+	}
+
+	response, err := c.httpClient.Do(request)
+	if err != nil {
+		return metrics, errors.New(fmt.Sprintf("Error getting metrics: %s", err))
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return metrics, errors.New(fmt.Sprintf("Error getting metrics, http status code: %d", response.StatusCode))
+	}
+
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return metrics, errors.New(fmt.Sprintf("Error reading metrics response: %s", err))
+	}
+	defer response.Body.Close()
+
+	if err := json.Unmarshal(responseBody, &metrics); err != nil {
+		return metrics, errors.New(fmt.Sprintf("Error unmarshalling metrics response: %s", err))
+	}
+
+	return metrics, nil
 }

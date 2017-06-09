@@ -74,6 +74,27 @@ The exporter returns the following [Admin Stats][admin-stats] metrics:
 | `grafana_admin_stats_last_scrape_timestamp` | Number of seconds since 1970 since last metrics scrape from Grafana Admin Stats | |
 | `grafana_admin_stats_last_scrape_duration_seconds` | Duration of the last metrics scrape from Grafana Admin Stats | |
 
+The exporter returns the following Grafana Metrics:
+
+| Metric | Description | Labels |
+| ------ | ----------- | ------ |
+| `grafana_metrics_alerting_active_alerts` | Number of active alerts | |
+| `grafana_metrics_alerting_notifications_sent` | Total number of alert notifications sent | `type` |
+| `grafana_metrics_alerting_results` | Total number of alerting results | `state` |
+| `grafana_metrics_api_responses` | Total number of API responses | `status_code` |
+| `grafana_metrics_api_user_signup` | Total number of API user signups | `state` |
+| `grafana_metrics_page_responses` | Total number of Page responses | `status_code` |
+| `grafana_metrics_proxy_responses` | Total number of Proxy responses | `status_code` |
+| `grafana_metrics_dashboards` | Number of dashboards | |
+| `grafana_metrics_orgs` | Number of orgs | |
+| `grafana_metrics_playlists` | Number of playlists | |
+| `grafana_metrics_users` | Number of users | |
+| `grafana_metrics_scrapes_total` | Total number of Grafana metrics scrapes | |
+| `grafana_metrics_scrape_errors_total` | Total number of Grafana metrics scrape errors | |
+| `grafana_metrics_last_scrape_error` | Whether the last metrics scrape from Grafana resulted in an error (`1` for error, `0` for success) | |
+| `grafana_metrics_last_scrape_timestamp` | Number of seconds since 1970 since last metrics scrape from Grafana | |
+| `grafana_metrics_last_scrape_duration_seconds` | Duration of the last metrics scrape from Grafana | |
+
 ## Contributing
 
 Refer to the [contributing guidelines][contributing].
