@@ -88,6 +88,6 @@ Apache License 2.0, see [LICENSE][license].
 [golang]: https://golang.org/
 [grafana]: https://grafana.com/
 [license]: https://github.com/frodenas/grafana_exporter/blob/master/LICENSE
-[manifest]: https://github.com/frodenas/grafanar_exporter/blob/master/manifest.yml
+[manifest]: https://github.com/frodenas/grafana_exporter/blob/master/manifest.yml
 [prometheus]: https://prometheus.io/
 [prometheus-boshrelease]: https://github.com/cloudfoundry-community/prometheus-boshrelease
