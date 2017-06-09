@@ -1,0 +1,7 @@
+/.build
+/.release
+/.tarballs
+/grafana_exporter
+*.tar.gz
+*.test
+*-stamp

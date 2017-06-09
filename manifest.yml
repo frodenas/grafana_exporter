@@ -1,0 +1,6 @@
+---
+applications:
+  - name: grafana-exporter
+    buildpack: go_buildpack
+    env:
+      GRAFANA_EXPORTER_GRAFANA_URL: "Your Grafana URL"
