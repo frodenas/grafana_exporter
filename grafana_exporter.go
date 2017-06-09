@@ -33,7 +33,7 @@ var (
 
 	grafanaSkipSSLValidation = flag.Bool(
 		"grafana.skip-ssl-verify", false,
-		"Disable Grafana SSL Verify  ($GRAFANA_EXPORTER_GRAFANA_SKIP_SSL_VERIFY).",
+		"Disable Grafana SSL Verify ($GRAFANA_EXPORTER_GRAFANA_SKIP_SSL_VERIFY).",
 	)
 
 	listenAddress = flag.String(

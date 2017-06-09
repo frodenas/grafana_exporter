@@ -49,6 +49,7 @@ This exporter can be deployed using the [Prometheus BOSH Release][prometheus-bos
 | `grafana.uri`<br />`GRAFANA_EXPORTER_GRAFANA_URI` | Yes | | Grafana URI |
 | `grafana.username`<br />`GRAFANA_EXPORTER_GRAFANA_USERNAME` | No | | Grafana Username |
 | `grafana.password`<br />`GRAFANA_EXPORTER_GRAFANA_PASSWORD` | No | | Grafana Password |
+| `grafana.skip-ssl-verify`<br />`GRAFANA_EXPORTER_GRAFANA_SKIP_SSL_VERIFY` | No | `false` | Disable Grafana SSL Verify |
 | `web.listen-address`<br />`GRAFANA_EXPORTER_WEB_LISTEN_ADDRESS` | No | `:9261` | Address to listen on for web interface and telemetry |
 | `web.telemetry-path`<br />`GRAFANA_EXPORTER_WEB_TELEMETRY_PATH` | No | `/metrics` | Path under which to expose Prometheus metrics |
 
