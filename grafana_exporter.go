@@ -100,20 +100,20 @@ func main() {
 	log.Infoln("Starting grafana_exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
 
-	grafanaClient, err := grafana.NewClient(*grafanaURI, *grafanaUsername, *grafanaPassword, *grafanaSkipSSLValidation)
+	grafanaClient, err := grafana.NewHTTPClient(*grafanaURI, *grafanaUsername, *grafanaPassword, *grafanaSkipSSLValidation)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)
 	}
 
-	adminStatsCollector, err := collectors.NewAdminStatsCollector(*grafanaClient)
+	adminStatsCollector, err := collectors.NewAdminStatsCollector(grafanaClient)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)
 	}
 	prometheus.MustRegister(adminStatsCollector)
 
-	metricsCollector, err := collectors.NewMetricsCollector(*grafanaClient)
+	metricsCollector, err := collectors.NewMetricsCollector(grafanaClient)
 	if err != nil {
 		log.Error(err)
 		os.Exit(1)

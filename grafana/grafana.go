@@ -1,5 +1,10 @@
 package grafana
 
+type Client interface {
+	GetAdminStats() (AdminStats, error)
+	GetMetrics() (Metrics, error)
+}
+
 type AdminStats struct {
 	AlertCount      int `json:"alert_count"`
 	DashboardCount  int `json:"dashboard_count"`

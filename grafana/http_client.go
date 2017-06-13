@@ -14,14 +14,14 @@ import (
 	"github.com/prometheus/common/version"
 )
 
-type Client struct {
+type HTTPClient struct {
 	url        *url.URL
 	username   string
 	password   string
 	httpClient *http.Client
 }
 
-func NewClient(uri string, username string, password string, skipSSLVerify bool) (*Client, error) {
+func NewHTTPClient(uri string, username string, password string, skipSSLVerify bool) (*HTTPClient, error) {
 	grafanaURL, err := url.Parse(uri)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func NewClient(uri string, username string, password string, skipSSLVerify bool)
 		Timeout:   time.Duration(10 * time.Second),
 		Transport: transport,
 	}
-	grafanaClient := &Client{
+	grafanaClient := &HTTPClient{
 		url:        grafanaURL,
 		username:   username,
 		password:   password,
@@ -53,7 +53,7 @@ func NewClient(uri string, username string, password string, skipSSLVerify bool)
 	return grafanaClient, nil
 }
 
-func (c *Client) GetAdminStats() (AdminStats, error) {
+func (c *HTTPClient) GetAdminStats() (AdminStats, error) {
 	var adminStats AdminStats
 
 	uri := c.url
@@ -89,7 +89,7 @@ func (c *Client) GetAdminStats() (AdminStats, error) {
 	return adminStats, nil
 }
 
-func (c *Client) GetMetrics() (Metrics, error) {
+func (c *HTTPClient) GetMetrics() (Metrics, error) {
 	var metrics Metrics
 
 	uri := c.url

@@ -10,10 +10,10 @@ import (
 	. "github.com/frodenas/grafana_exporter/grafana"
 )
 
-var _ = Describe("SecurityGroupsCollectors", func() {
+var _ = Describe("HTTPClient", func() {
 	var (
 		server *ghttp.Server
-		client *Client
+		client Client
 		err    error
 
 		username      = "fake-username"
@@ -24,7 +24,7 @@ var _ = Describe("SecurityGroupsCollectors", func() {
 	BeforeEach(func() {
 		server = ghttp.NewServer()
 
-		client, err = NewClient(server.URL(), username, password, skipSSLVerify)
+		client, err = NewHTTPClient(server.URL(), username, password, skipSSLVerify)
 		Expect(err).ToNot(HaveOccurred())
 	})
 
