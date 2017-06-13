@@ -106,18 +106,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	adminStatsCollector, err := collectors.NewAdminStatsCollector(grafanaClient)
-	if err != nil {
-		log.Error(err)
-		os.Exit(1)
-	}
+	adminStatsCollector := collectors.NewAdminStatsCollector(grafanaClient)
 	prometheus.MustRegister(adminStatsCollector)
 
-	metricsCollector, err := collectors.NewMetricsCollector(grafanaClient)
-	if err != nil {
-		log.Error(err)
-		os.Exit(1)
-	}
+	metricsCollector := collectors.NewMetricsCollector(grafanaClient)
 	prometheus.MustRegister(metricsCollector)
 
 	http.Handle(*metricsPath, prometheus.Handler())

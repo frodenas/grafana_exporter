@@ -27,7 +27,7 @@ type AdminStatsCollector struct {
 	lastScrapeDurationSecondsMetric prometheus.Gauge
 }
 
-func NewAdminStatsCollector(grafanaClient grafana.Client) (*AdminStatsCollector, error) {
+func NewAdminStatsCollector(grafanaClient grafana.Client) *AdminStatsCollector {
 	totalAlertsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
@@ -172,7 +172,7 @@ func NewAdminStatsCollector(grafanaClient grafana.Client) (*AdminStatsCollector,
 		lastScrapeDurationSecondsMetric: lastScrapeDurationSecondsMetric,
 	}
 
-	return adminStatsCollector, nil
+	return adminStatsCollector
 }
 
 func (c *AdminStatsCollector) Describe(ch chan<- *prometheus.Desc) {

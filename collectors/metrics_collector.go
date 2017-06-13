@@ -29,7 +29,7 @@ type MetricsCollector struct {
 	lastScrapeDurationSecondsMetric prometheus.Gauge
 }
 
-func NewMetricsCollector(grafanaClient grafana.Client) (*MetricsCollector, error) {
+func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 	alertingActiveAlertsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
@@ -200,7 +200,7 @@ func NewMetricsCollector(grafanaClient grafana.Client) (*MetricsCollector, error
 		lastScrapeDurationSecondsMetric: lastScrapeDurationSecondsMetric,
 	}
 
-	return metricsCollector, nil
+	return metricsCollector
 }
 
 func (c *MetricsCollector) Describe(ch chan<- *prometheus.Desc) {
