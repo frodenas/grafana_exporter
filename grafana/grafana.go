@@ -51,7 +51,7 @@ type Metrics struct {
 	APIRespStatusCode404               Counter `json:"api.resp_status.code_404"`
 	APIRespStatusCode500               Counter `json:"api.resp_status.code_500"`
 	APIRespStatusCodeUnknown           Counter `json:"api.resp_status.code_unknown"`
-	APIUserSignupComplete              Counter `json:"api.user.signup_completed"`
+	APIUserSignupCompleted             Counter `json:"api.user.signup_completed"`
 	APIUserSignupInvite                Counter `json:"api.user.signup_invite"`
 	APIUserSignupStarted               Counter `json:"api.user.signup_started"`
 	AWSCloudwatchGetMetricStatistics   Counter `json:"aws.cloudwatch.get_metric_statistics"`

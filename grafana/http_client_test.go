@@ -232,7 +232,7 @@ var _ = Describe("HTTPClient", func() {
 				APIRespStatusCodeUnknown: Counter{
 					Count: int64(28),
 				},
-				APIUserSignupComplete: Counter{
+				APIUserSignupCompleted: Counter{
 					Count: int64(29),
 				},
 				APIUserSignupInvite: Counter{

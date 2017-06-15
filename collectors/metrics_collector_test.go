@@ -513,7 +513,7 @@ var _ = Describe("MetricsCollectors", func() {
 				APIRespStatusCodeUnknown: grafana.Counter{
 					Count: int64(apiRespStatusCodeUnknownCount),
 				},
-				APIUserSignupComplete: grafana.Counter{
+				APIUserSignupCompleted: grafana.Counter{
 					Count: int64(apiUserSignupCompletedCount),
 				},
 				APIUserSignupInvite: grafana.Counter{

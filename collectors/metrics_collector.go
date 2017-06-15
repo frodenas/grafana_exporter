@@ -285,7 +285,7 @@ func (c *MetricsCollector) reportMetrics(ch chan<- prometheus.Metric) error {
 	c.apiResponsesMetric.Collect(ch)
 
 	c.apiUserSignupsMetric.Reset()
-	c.apiUserSignupsMetric.WithLabelValues("completed").Add(float64(metrics.APIUserSignupComplete.Count))
+	c.apiUserSignupsMetric.WithLabelValues("completed").Add(float64(metrics.APIUserSignupCompleted.Count))
 	c.apiUserSignupsMetric.WithLabelValues("invite").Add(float64(metrics.APIUserSignupInvite.Count))
 	c.apiUserSignupsMetric.WithLabelValues("started").Add(float64(metrics.APIUserSignupStarted.Count))
 	c.apiUserSignupsMetric.Collect(ch)
