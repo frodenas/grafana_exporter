@@ -1,5 +1,40 @@
+sudo: required
+
 language: go
 
 go_import_path: github.com/frodenas/grafana_exporter
 
 script: make test
+
+services:
+  - docker
+
+env:
+  matrix:
+    - DOCKER_IMAGE_NAME=frodenas/grafana-exporter
+  global:
+    - secure: spsvlHiZvY2EdpeiRTKL2rhmiqPw5HYbsSj8/MCEg1ZR95/rhV6lOVDnmpyyVu67fLsWnaISACUforpNWG4UWZWwZBQPcG3tqIk8YtPcqm0OoCEHsW3TTBulOb1ywjgCoDXrqxEjJ94DbK/jpOPCoN2uTZ9i5QRu4cVokiJq5cQ3EfSF/Rd6ElPAOVazOIIwGtb3VfoaU4bO/TlnmXGrw98gdqxFIk7jg42cOzvnJSRZL+sncQzrlia9hnrK+ZR/VXDZg0+a1FWDEECB4mxemOk0sUteiCQtb8KNRQGgtiavG2FxiCVJIkKvDdcUFYHMHYa+lWs41beaCkzJUEJCqnnJ7C/itPSCJE8VNDnWnt/tnOo/v1v4bTiLOlqtBr1qc5hXHMW37mdVSI8J8GnOKNNv0SOtD8fRiKLAsZVMQx5jcVjL90imLX7oh1TXqEAOA54ixM3NEMLgP5Gd8aIMO5STVeFQE2K/uz9iaDv+GXq0LSFnPcE6/i8qQkZYzYG0J7KtGtao8DIuRI2QlctwGmtPlwzIZGbZP/HUhEfSWnyNQ7psnCd7vxM4v0oeiPuP3xthqgjPl1YVhTnN0jEJFHX24vMvoo+qPthwcwsj7Kk+G8PIs0sBnQn8jhAeTN4bca+EKh4lnkJl0vdEbLQRoJucIQP0AcPHyvu5paZYTJQ=
+    - secure: AAxSodLz/dgYmrs4GopgcvCeIx93LWPBbtLupx3ZtRFwCVhL058avX0uSLL18M6DbOpiH/JWebzBF7omni80xfJEubrbPpf4FoCD5pUrmJMS3O4hWNGpN7PlsPHWe9HmhiQbNqpvkPPk6H+WgvQCB8uTz1nRhybuvR1qX+NFFYC9XFkQpVslNFof6W41scjt1TFJoyGv0UktFGHrIz4RA9T0fZ+T+pQFSOvj8o6Ai3PsR4frrKGJiLZSjTzxCn715vZKZ0OtSYQ1wO++ecrWM+62l9dcA0B6PLULjd7i01HlR2KjJGbQDmWNMWwKThMowqgpUeG83/EP2OvkQY5YoQIyY/k904beDkdni9mLXwiW5YcCBhNLpAVa/KLoVpuU3O6ZRf7CoiWQgkJClOBPZ0J7JEchVgCOkf3iwFo3ICFhLqerItYmhY6omlVQjr0OiUN+FH8j5y9IbGnNDrHRK5DR9lZcYf8cBcOeCC7O0Yg0ATXx8xTkPPmO+Sr7Yq/29jrlijuLqciKSlBQpp17CkfFaCMsxRWp1lL9CuLwFhJSwRbn6g9DAnZLvniTZDh5Kw71JdLXK+3wm//v4+LGnQF8u9HR4GEC+EORGh1NVzssLPAER8GrQche4c4mu6Ra5NMMv037B7ESZaH1vjkYlXrKJEeIslFFyRULxs365fE=
+    - secure: QQ16PqzysVYqrlj7Hrdcori4mq2JUL0ZQfQ0L8FMmF4XmV5JR3BjglhhSNBFhLaAsL+VWXdYZXHAbVqTwKl+wHrfZinY2+Cvt1/+I1b+pZRGsUbdikh9B4aYDixiNlww0gDWCBjqAyW7SGnbP3BnjK1yK2pTVTxONji90JIiRlWHFaoMDS24moIBHwQKbRubS7WBie1DlrAf+SatFqaqZ8gz5egsrZgPMboKSCxlfXWpZow2N8P2Z2qhBWbRXhgKltoNgvzn2YiY/fZ94AQ8QZys8B9KyQMQrOA0uu85mcE8fKxDgeeViP2Hx1cJ9D2nwMEooFP1W+6yk5uGW/2oB35aDrCgzs1I43Xxo5IcMnCbOhFvfRoc4zxnWViuQhwC21CmGVU1s6GrpGpAgXpsVOZH/iOxG+SLezj+Oy02i7SsXbjnuikJcS3cQiTbOIiXGpdX1+v82pP2gZPWKVQ+/LkeKamXt4GPLSU2/xZk7H3A0lqvPot23xoOGe7DbBlZvP2/joVOoPiQmBUl9jRpnVI860Yebgl0Nk9qErdjQ93m6xjCG/z1ZibWRJIyj0blfI99OrdyVlQNL9AMVnS3m1S0A47zss74S+dTaYs94hhQd0viUzz+HZgdl2yLm8BWs6esCKdjUtlW/RG0gz5QUk00gxvfDdVGtmsAPgbJ8aQ=
+
+jobs:
+  include:
+    - stage: tests
+      script: make test
+    - stage: docker image
+      script:
+        - make crossbuild
+        - ln -s .build/linux-amd64/grafana_exporter grafana_exporter
+        - |
+          if [ -n "$TRAVIS_TAG" ]; then
+            make docker DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME DOCKER_IMAGE_TAG=$TRAVIS_TAG
+          else
+            make docker DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME DOCKER_IMAGE_TAG=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+          fi
+        - |
+          if [[ "$TRAVIS_TAG" =~ ^v[0-9]+(\.[0-9]+){2}$ ]]; then
+            docker tag "$DOCKER_IMAGE_NAME:$TRAVIS_TAG" "$DOCKER_IMAGE_NAME:latest"
+          fi
+        - docker images
+        - docker login -e $DOCKER_EMAIL -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        - docker push $DOCKER_IMAGE_NAME

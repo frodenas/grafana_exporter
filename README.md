@@ -21,6 +21,14 @@ $ go install github.com/frodenas/grafana_exporter
 $ grafana_exporter <flags>
 ```
 
+### Docker
+
+To run the grafana exporter as a Docker container, run:
+
+```bash
+$ docker run -p 9261:9261 frodenas/grafana-exporter <flags>
+```
+
 ### Cloud Foundry
 
 The exporter can be deployed to an already existing [Cloud Foundry][cloudfoundry] environment:
