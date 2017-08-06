@@ -11,9 +11,9 @@ type AdminStats struct {
 	DatasourceCount int `json:"data_source_count"`
 	OrgCount        int `json:"org_count"`
 	PlaylistCount   int `json:"playlist_count"`
-	SnapshotCount   int `json:"db_snapshot_count"`
-	StarredCount    int `json:"starred_db_count"`
-	TagCount        int `json:"db_tag_count"`
+	DBSnapshotCount int `json:"db_snapshot_count"`
+	StarredDBCount  int `json:"starred_db_count"`
+	DBTagCount      int `json:"db_tag_count"`
 	UserCount       int `json:"user_count"`
 }
 

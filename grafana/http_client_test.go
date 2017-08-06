@@ -47,9 +47,9 @@ var _ = Describe("HTTPClient", func() {
 				DatasourceCount: 3,
 				OrgCount:        4,
 				PlaylistCount:   5,
-				SnapshotCount:   6,
-				StarredCount:    7,
-				TagCount:        8,
+				DBSnapshotCount: 6,
+				StarredDBCount:  7,
+				DBTagCount:      8,
 				UserCount:       9,
 			}
 

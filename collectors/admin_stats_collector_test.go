@@ -23,15 +23,15 @@ var _ = Describe("AdminStatsCollectors", func() {
 	var (
 		grafanaClient *grafanafakes.FakeClient
 
-		totalAlertsMetric               prometheus.Gauge
-		totalDashboardsMetric           prometheus.Gauge
-		totalDatasourcesMetric          prometheus.Gauge
-		totalOrgsMetric                 prometheus.Gauge
-		totalPlaylistsMetric            prometheus.Gauge
-		totalSnapshotsMetric            prometheus.Gauge
-		totalStarredMetric              prometheus.Gauge
-		totalTagsMetric                 prometheus.Gauge
-		totalUsersMetric                prometheus.Gauge
+		alertsMetric                    prometheus.Gauge
+		dashboardsMetric                prometheus.Gauge
+		datasourcesMetric               prometheus.Gauge
+		orgsMetric                      prometheus.Gauge
+		playlistsMetric                 prometheus.Gauge
+		dbSnapshotsMetric               prometheus.Gauge
+		starredDBMetric                 prometheus.Gauge
+		dbTagsMetric                    prometheus.Gauge
+		usersMetric                     prometheus.Gauge
 		scrapesTotalMetric              prometheus.Counter
 		scrapeErrorsTotalMetric         prometheus.Counter
 		lastScrapeErrorMetric           prometheus.Gauge
@@ -54,95 +54,86 @@ var _ = Describe("AdminStatsCollectors", func() {
 	BeforeEach(func() {
 		grafanaClient = &grafanafakes.FakeClient{}
 
-		totalAlertsMetric = prometheus.NewGauge(
+		alertsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "alerts_total",
-				Help:      "Total number of Grafana Alerts.",
+				Name:      "alerts",
+				Help:      "Number of Grafana Alerts.",
 			},
 		)
-		totalAlertsMetric.Set(float64(alertCount))
 
-		totalDashboardsMetric = prometheus.NewGauge(
+		dashboardsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "dashboards_total",
-				Help:      "Total number of Grafana Dashboards.",
+				Name:      "dashboards",
+				Help:      "Number of Grafana Dashboards.",
 			},
 		)
-		totalDashboardsMetric.Set(float64(dashboardCount))
 
-		totalDatasourcesMetric = prometheus.NewGauge(
+		datasourcesMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "datasources_total",
-				Help:      "Total number of Grafana Datasources.",
+				Name:      "datasources",
+				Help:      "Number of Grafana Datasources.",
 			},
 		)
-		totalDatasourcesMetric.Set(float64(datasourceCount))
 
-		totalOrgsMetric = prometheus.NewGauge(
+		orgsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "orgs_total",
-				Help:      "Total number of Grafana Orgs.",
+				Name:      "orgs",
+				Help:      "Number of Grafana Orgs.",
 			},
 		)
-		totalOrgsMetric.Set(float64(orgCount))
 
-		totalPlaylistsMetric = prometheus.NewGauge(
+		playlistsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "playlists_total",
-				Help:      "Total number of Grafana Playlists.",
+				Name:      "playlists",
+				Help:      "Number of Grafana Playlists.",
 			},
 		)
-		totalPlaylistsMetric.Set(float64(playlistCount))
 
-		totalSnapshotsMetric = prometheus.NewGauge(
+		dbSnapshotsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "snapshots_total",
-				Help:      "Total number of Grafana Snapshots.",
+				Name:      "db_snapshots",
+				Help:      "Number of Grafana Snapshots.",
 			},
 		)
-		totalSnapshotsMetric.Set(float64(snapshotCount))
 
-		totalStarredMetric = prometheus.NewGauge(
+		starredDBMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "starred_total",
-				Help:      "Total number of Grafana Dashboards Starred.",
+				Name:      "starred_db",
+				Help:      "Number of Grafana Dashboards Starred.",
 			},
 		)
-		totalStarredMetric.Set(float64(starredCount))
 
-		totalTagsMetric = prometheus.NewGauge(
+		dbTagsMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "tags_total",
-				Help:      "Total number of Grafana Tags.",
+				Name:      "db_tags",
+				Help:      "Number of Grafana Tags.",
 			},
 		)
-		totalTagsMetric.Set(float64(tagCount))
 
-		totalUsersMetric = prometheus.NewGauge(
+		usersMetric = prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: "grafana",
 				Subsystem: "admin_stats",
-				Name:      "users_total",
-				Help:      "Total number of Grafana Users.",
+				Name:      "users",
+				Help:      "Number of Grafana Users.",
 			},
 		)
-		totalUsersMetric.Set(float64(userCount))
 
 		scrapesTotalMetric = prometheus.NewCounter(
 			prometheus.CounterOpts{
@@ -209,40 +200,40 @@ var _ = Describe("AdminStatsCollectors", func() {
 			go adminStatsCollector.Describe(descriptions)
 		})
 
-		It("returns a grafana_admin_stats_alerts_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalAlertsMetric.Desc())))
+		It("returns a grafana_admin_stats_alerts metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(alertsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_dashboards_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalDashboardsMetric.Desc())))
+		It("returns a grafana_admin_stats_dashboards metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(dashboardsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_datasources_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalDatasourcesMetric.Desc())))
+		It("returns a grafana_admin_stats_datasources metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(datasourcesMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_orgs_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalOrgsMetric.Desc())))
+		It("returns a grafana_admin_stats_orgs metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(orgsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_playlists_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalPlaylistsMetric.Desc())))
+		It("returns a grafana_admin_stats_playlists metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(playlistsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_snapshots_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalSnapshotsMetric.Desc())))
+		It("returns a grafana_admin_stats_db_snapshots metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(dbSnapshotsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_starred_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalStarredMetric.Desc())))
+		It("returns a grafana_admin_stats_starred_db metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(starredDBMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_tags_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalTagsMetric.Desc())))
+		It("returns a grafana_admin_stats_db_tags metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(dbTagsMetric.Desc())))
 		})
 
-		It("returns a grafana_admin_stats_users_total metric description", func() {
-			Eventually(descriptions).Should(Receive(Equal(totalUsersMetric.Desc())))
+		It("returns a grafana_admin_stats_users metric description", func() {
+			Eventually(descriptions).Should(Receive(Equal(usersMetric.Desc())))
 		})
 
 		It("returns a grafana_admin_stats_scrapes_total metric description", func() {
@@ -280,9 +271,9 @@ var _ = Describe("AdminStatsCollectors", func() {
 				DatasourceCount: datasourceCount,
 				OrgCount:        orgCount,
 				PlaylistCount:   playlistCount,
-				SnapshotCount:   snapshotCount,
-				StarredCount:    starredCount,
-				TagCount:        tagCount,
+				DBSnapshotCount: snapshotCount,
+				StarredDBCount:  starredCount,
+				DBTagCount:      tagCount,
 				UserCount:       userCount,
 			}
 			grafanaClient.GetAdminStatsReturns(adminStatsResponse, nil)
@@ -294,40 +285,40 @@ var _ = Describe("AdminStatsCollectors", func() {
 			go adminStatsCollector.Collect(metrics)
 		})
 
-		It("returns a grafana_admin_stats_alerts_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalAlertsMetric)))
+		It("returns a grafana_admin_stats_alerts metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(alertsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_dashboards_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalDashboardsMetric)))
+		It("returns a grafana_admin_stats_dashboards metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(dashboardsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_datasources_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalDatasourcesMetric)))
+		It("returns a grafana_admin_stats_datasources metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(datasourcesMetric)))
 		})
 
-		It("returns a grafana_admin_stats_orgs_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalOrgsMetric)))
+		It("returns a grafana_admin_stats_orgs metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(orgsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_playlists_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalPlaylistsMetric)))
+		It("returns a grafana_admin_stats_playlists metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(playlistsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_snapshots_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalSnapshotsMetric)))
+		It("returns a grafana_admin_stats_db_snapshots metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(dbSnapshotsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_starred_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalStarredMetric)))
+		It("returns a grafana_admin_stats_starred_db metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(starredDBMetric)))
 		})
 
-		It("returns a grafana_admin_stats_tags_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalTagsMetric)))
+		It("returns a grafana_admin_stats_db_tags metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(dbTagsMetric)))
 		})
 
-		It("returns a grafana_admin_stats_users_total metric", func() {
-			Eventually(metrics).Should(Receive(PrometheusMetric(totalUsersMetric)))
+		It("returns a grafana_admin_stats_users metric", func() {
+			Eventually(metrics).Should(Receive(PrometheusMetric(usersMetric)))
 		})
 
 		It("returns a grafana_admin_stats_scrapes_total metric", func() {

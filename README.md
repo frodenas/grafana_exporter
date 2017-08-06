@@ -67,16 +67,15 @@ The exporter returns the following [Admin Stats][admin-stats] metrics:
 
 | Metric | Description | Labels |
 | ------ | ----------- | ------ |
-| `grafana_admin_stats_alerts_total` | Total number of Grafana Alerts | |
-| `grafana_admin_stats_dashboards_total` | Total number of Grafana Dashboards | |
-| `grafana_admin_stats_datasources_total` | Total number of Grafana Datasources | |
-| `grafana_admin_stats_orgs_total` | Total number of Grafana Orgs | |
-| `grafana_admin_stats_playlists_total` | Total number of Grafana Playlists | |
-| `grafana_admin_stats_snapshots_total` | Total number of Grafana Snapshots | |
-| `grafana_admin_stats_starred_total` | Total number of Grafana Dashboards Starred | |
-| `grafana_admin_stats_tags_total` | Total number of Grafana Tags | |
-| `grafana_admin_stats_users_total` | Total number of Grafana Users | |
-| `grafana_admin_stats_scrapes_total` | Total number of Grafana Admin Stats scrapes | |
+| `grafana_admin_stats_alerts` | Number of Grafana Alerts | |
+| `grafana_admin_stats_dashboards` | Number of Grafana Dashboards | |
+| `grafana_admin_stats_datasources` | Number of Grafana Datasources | |
+| `grafana_admin_stats_orgs` | Number of Grafana Orgs | |
+| `grafana_admin_stats_playlists` | Number of Grafana Playlists | |
+| `grafana_admin_stats_db_snapshots` | Number of Grafana Snapshots | |
+| `grafana_admin_stats_starred_db_total` | Number of Grafana Dashboards Starred | |
+| `grafana_admin_stats_db_tags` | Number of Grafana Tags | |
+| `grafana_admin_stats_users` | Number of Grafana Admin Stats scrapes | |
 | `grafana_admin_stats_scrape_errors_total` | Total number of Grafana Admin Stats scrape errors | |
 | `grafana_admin_stats_last_scrape_error` | Whether the last metrics scrape from Grafana Admin Stats resulted in an error (`1` for error, `0` for success) | |
 | `grafana_admin_stats_last_scrape_timestamp` | Number of seconds since 1970 since last metrics scrape from Grafana Admin Stats | |

@@ -11,15 +11,15 @@ import (
 
 type AdminStatsCollector struct {
 	grafanaClient                   grafana.Client
-	totalAlertsMetric               prometheus.Gauge
-	totalDashboardsMetric           prometheus.Gauge
-	totalDatasourcesMetric          prometheus.Gauge
-	totalOrgsMetric                 prometheus.Gauge
-	totalPlaylistsMetric            prometheus.Gauge
-	totalSnapshotsMetric            prometheus.Gauge
-	totalStarredMetric              prometheus.Gauge
-	totalTagsMetric                 prometheus.Gauge
-	totalUsersMetric                prometheus.Gauge
+	alertsMetric                    prometheus.Gauge
+	dashboardsMetric                prometheus.Gauge
+	datasourcesMetric               prometheus.Gauge
+	orgsMetric                      prometheus.Gauge
+	playlistsMetric                 prometheus.Gauge
+	dbSnapshotsMetric               prometheus.Gauge
+	starredDBMetric                 prometheus.Gauge
+	dbTagsMetric                    prometheus.Gauge
+	usersMetric                     prometheus.Gauge
 	scrapesTotalMetric              prometheus.Counter
 	scrapeErrorsTotalMetric         prometheus.Counter
 	lastScrapeErrorMetric           prometheus.Gauge
@@ -28,84 +28,84 @@ type AdminStatsCollector struct {
 }
 
 func NewAdminStatsCollector(grafanaClient grafana.Client) *AdminStatsCollector {
-	totalAlertsMetric := prometheus.NewGauge(
+	alertsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "alerts_total",
-			Help:      "Total number of Grafana Alerts.",
+			Name:      "alerts",
+			Help:      "Number of Grafana Alerts.",
 		},
 	)
 
-	totalDashboardsMetric := prometheus.NewGauge(
+	dashboardsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "dashboards_total",
-			Help:      "Total number of Grafana Dashboards.",
+			Name:      "dashboards",
+			Help:      "Number of Grafana Dashboards.",
 		},
 	)
 
-	totalDatasourcesMetric := prometheus.NewGauge(
+	datasourcesMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "datasources_total",
-			Help:      "Total number of Grafana Datasources.",
+			Name:      "datasources",
+			Help:      "Number of Grafana Datasources.",
 		},
 	)
 
-	totalOrgsMetric := prometheus.NewGauge(
+	orgsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "orgs_total",
-			Help:      "Total number of Grafana Orgs.",
+			Name:      "orgs",
+			Help:      "Number of Grafana Orgs.",
 		},
 	)
 
-	totalPlaylistsMetric := prometheus.NewGauge(
+	playlistsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "playlists_total",
-			Help:      "Total number of Grafana Playlists.",
+			Name:      "playlists",
+			Help:      "Number of Grafana Playlists.",
 		},
 	)
 
-	totalSnapshotsMetric := prometheus.NewGauge(
+	dbSnapshotsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "snapshots_total",
-			Help:      "Total number of Grafana Snapshots.",
+			Name:      "db_snapshots",
+			Help:      "Number of Grafana Snapshots.",
 		},
 	)
 
-	totalStarredMetric := prometheus.NewGauge(
+	starredDBMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "starred_total",
-			Help:      "Total number of Grafana Dashboards Starred.",
+			Name:      "starred_db",
+			Help:      "Number of Grafana Dashboards Starred.",
 		},
 	)
 
-	totalTagsMetric := prometheus.NewGauge(
+	dbTagsMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "tags_total",
-			Help:      "Total number of Grafana Tags.",
+			Name:      "db_tags",
+			Help:      "Number of Grafana Tags.",
 		},
 	)
 
-	totalUsersMetric := prometheus.NewGauge(
+	usersMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "admin_stats",
-			Name:      "users_total",
-			Help:      "Total number of Grafana Users.",
+			Name:      "users",
+			Help:      "Number of Grafana Users.",
 		},
 	)
 
@@ -156,15 +156,15 @@ func NewAdminStatsCollector(grafanaClient grafana.Client) *AdminStatsCollector {
 
 	adminStatsCollector := &AdminStatsCollector{
 		grafanaClient:                   grafanaClient,
-		totalAlertsMetric:               totalAlertsMetric,
-		totalDashboardsMetric:           totalDashboardsMetric,
-		totalDatasourcesMetric:          totalDatasourcesMetric,
-		totalOrgsMetric:                 totalOrgsMetric,
-		totalPlaylistsMetric:            totalPlaylistsMetric,
-		totalSnapshotsMetric:            totalSnapshotsMetric,
-		totalStarredMetric:              totalStarredMetric,
-		totalTagsMetric:                 totalTagsMetric,
-		totalUsersMetric:                totalUsersMetric,
+		alertsMetric:                    alertsMetric,
+		dashboardsMetric:                dashboardsMetric,
+		datasourcesMetric:               datasourcesMetric,
+		orgsMetric:                      orgsMetric,
+		playlistsMetric:                 playlistsMetric,
+		dbSnapshotsMetric:               dbSnapshotsMetric,
+		starredDBMetric:                 starredDBMetric,
+		dbTagsMetric:                    dbTagsMetric,
+		usersMetric:                     usersMetric,
 		scrapesTotalMetric:              scrapesTotalMetric,
 		scrapeErrorsTotalMetric:         scrapeErrorsTotalMetric,
 		lastScrapeErrorMetric:           lastScrapeErrorMetric,
@@ -176,15 +176,15 @@ func NewAdminStatsCollector(grafanaClient grafana.Client) *AdminStatsCollector {
 }
 
 func (c *AdminStatsCollector) Describe(ch chan<- *prometheus.Desc) {
-	c.totalAlertsMetric.Describe(ch)
-	c.totalDashboardsMetric.Describe(ch)
-	c.totalDatasourcesMetric.Describe(ch)
-	c.totalOrgsMetric.Describe(ch)
-	c.totalPlaylistsMetric.Describe(ch)
-	c.totalSnapshotsMetric.Describe(ch)
-	c.totalStarredMetric.Describe(ch)
-	c.totalTagsMetric.Describe(ch)
-	c.totalUsersMetric.Describe(ch)
+	c.alertsMetric.Describe(ch)
+	c.dashboardsMetric.Describe(ch)
+	c.datasourcesMetric.Describe(ch)
+	c.orgsMetric.Describe(ch)
+	c.playlistsMetric.Describe(ch)
+	c.dbSnapshotsMetric.Describe(ch)
+	c.starredDBMetric.Describe(ch)
+	c.dbTagsMetric.Describe(ch)
+	c.usersMetric.Describe(ch)
 	c.scrapesTotalMetric.Describe(ch)
 	c.scrapeErrorsTotalMetric.Describe(ch)
 	c.lastScrapeErrorMetric.Describe(ch)
@@ -222,32 +222,32 @@ func (c *AdminStatsCollector) reportAdminStatsMetrics(ch chan<- prometheus.Metri
 		return err
 	}
 
-	c.totalAlertsMetric.Set(float64(adminStats.AlertCount))
-	c.totalAlertsMetric.Collect(ch)
+	c.alertsMetric.Set(float64(adminStats.AlertCount))
+	c.alertsMetric.Collect(ch)
 
-	c.totalDashboardsMetric.Set(float64(adminStats.DashboardCount))
-	c.totalDashboardsMetric.Collect(ch)
+	c.dashboardsMetric.Set(float64(adminStats.DashboardCount))
+	c.dashboardsMetric.Collect(ch)
 
-	c.totalDatasourcesMetric.Set(float64(adminStats.DatasourceCount))
-	c.totalDatasourcesMetric.Collect(ch)
+	c.datasourcesMetric.Set(float64(adminStats.DatasourceCount))
+	c.datasourcesMetric.Collect(ch)
 
-	c.totalOrgsMetric.Set(float64(adminStats.OrgCount))
-	c.totalOrgsMetric.Collect(ch)
+	c.orgsMetric.Set(float64(adminStats.OrgCount))
+	c.orgsMetric.Collect(ch)
 
-	c.totalPlaylistsMetric.Set(float64(adminStats.PlaylistCount))
-	c.totalPlaylistsMetric.Collect(ch)
+	c.playlistsMetric.Set(float64(adminStats.PlaylistCount))
+	c.playlistsMetric.Collect(ch)
 
-	c.totalSnapshotsMetric.Set(float64(adminStats.SnapshotCount))
-	c.totalSnapshotsMetric.Collect(ch)
+	c.dbSnapshotsMetric.Set(float64(adminStats.DBSnapshotCount))
+	c.dbSnapshotsMetric.Collect(ch)
 
-	c.totalStarredMetric.Set(float64(adminStats.StarredCount))
-	c.totalStarredMetric.Collect(ch)
+	c.starredDBMetric.Set(float64(adminStats.StarredDBCount))
+	c.starredDBMetric.Collect(ch)
 
-	c.totalTagsMetric.Set(float64(adminStats.TagCount))
-	c.totalTagsMetric.Collect(ch)
+	c.dbTagsMetric.Set(float64(adminStats.DBTagCount))
+	c.dbTagsMetric.Collect(ch)
 
-	c.totalUsersMetric.Set(float64(adminStats.UserCount))
-	c.totalUsersMetric.Collect(ch)
+	c.usersMetric.Set(float64(adminStats.UserCount))
+	c.usersMetric.Collect(ch)
 
 	return nil
 }
