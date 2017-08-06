@@ -10,23 +10,36 @@ import (
 )
 
 type MetricsCollector struct {
-	grafanaClient                   grafana.Client
-	alertingActiveAlertsMetric      prometheus.Gauge
-	alertingNotificationsSentMetric *prometheus.CounterVec
-	alertingResultsMetric           *prometheus.CounterVec
-	apiResponsesMetric              *prometheus.CounterVec
-	apiUserSignupsMetric            *prometheus.CounterVec
-	pageResponsesMetric             *prometheus.CounterVec
-	proxyResponsesMetric            *prometheus.CounterVec
-	dashboardsMetric                prometheus.Gauge
-	orgsMetric                      prometheus.Gauge
-	playlistsMetric                 prometheus.Gauge
-	usersMetric                     prometheus.Gauge
-	scrapesTotalMetric              prometheus.Counter
-	scrapeErrorsTotalMetric         prometheus.Counter
-	lastScrapeErrorMetric           prometheus.Gauge
-	lastScrapeTimestampMetric       prometheus.Gauge
-	lastScrapeDurationSecondsMetric prometheus.Gauge
+	grafanaClient                          grafana.Client
+	alertingActiveAlertsMetric             prometheus.Gauge
+	alertingNotificationsSentMetric        *prometheus.GaugeVec
+	alertingResultsMetric                  *prometheus.GaugeVec
+	apiAdminUserCreateMetric               prometheus.Gauge
+	apiDashboardSnapshotCreateMetric       prometheus.Gauge
+	apiDashboardSnapshotExternalMetric     prometheus.Gauge
+	apiDashboardSnapshotGetMetric          prometheus.Gauge
+	apiLoginOauthMetric                    prometheus.Gauge
+	apiLoginPostMetric                     prometheus.Gauge
+	apiOrgCreateMetric                     prometheus.Gauge
+	apiResponsesMetric                     *prometheus.GaugeVec
+	apiUserSignupsCompletedMetric          prometheus.Gauge
+	apiUserSignupsInviteMetric             prometheus.Gauge
+	apiUserSignupsStartedMetric            prometheus.Gauge
+	awsCloudwatchGetMetricStatisticsMetric prometheus.Gauge
+	awsCloudwatchListMetricsMetric         prometheus.Gauge
+	instanceStartMetric                    prometheus.Gauge
+	modelsDashboardInsertMetric            prometheus.Gauge
+	pageResponsesMetric                    *prometheus.GaugeVec
+	proxyResponsesMetric                   *prometheus.GaugeVec
+	dashboardsMetric                       prometheus.Gauge
+	orgsMetric                             prometheus.Gauge
+	playlistsMetric                        prometheus.Gauge
+	usersMetric                            prometheus.Gauge
+	scrapesTotalMetric                     prometheus.Counter
+	scrapeErrorsTotalMetric                prometheus.Counter
+	lastScrapeErrorMetric                  prometheus.Gauge
+	lastScrapeTimestampMetric              prometheus.Gauge
+	lastScrapeDurationSecondsMetric        prometheus.Gauge
 }
 
 func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
@@ -39,64 +52,180 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 		},
 	)
 
-	alertingNotificationsSentMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	alertingNotificationsSentMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
 			Name:      "alerting_notifications_sent",
-			Help:      "Total number of alert notifications sent.",
+			Help:      "Number of alert notifications sent.",
 		},
 		[]string{"type"},
 	)
 
-	alertingResultsMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	alertingResultsMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
 			Name:      "alerting_results",
-			Help:      "Total number of alerting results.",
+			Help:      "Number of alerting results.",
 		},
 		[]string{"state"},
 	)
 
-	apiResponsesMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	apiAdminUserCreateMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_admin_user_create",
+			Help:      "Number of calls to Admin User Create API.",
+		},
+	)
+
+	apiDashboardSnapshotCreateMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_snapshot_create",
+			Help:      "Number of calls to Dashboard Snapshot Create API.",
+		},
+	)
+
+	apiDashboardSnapshotExternalMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_snapshot_external",
+			Help:      "Number of calls to Dashboard Snapshot External API.",
+		},
+	)
+
+	apiDashboardSnapshotGetMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_snapshot_get",
+			Help:      "Number of calls to Dashboard Snapshot Get API.",
+		},
+	)
+
+	apiLoginOauthMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_login_oauth",
+			Help:      "Number of calls to Login OAuth API.",
+		},
+	)
+
+	apiLoginPostMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_login_post",
+			Help:      "Number of calls to Login Post API.",
+		},
+	)
+
+	apiOrgCreateMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_org_create",
+			Help:      "Number of calls to Org Create API.",
+		},
+	)
+
+	apiResponsesMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
 			Name:      "api_responses",
-			Help:      "Total number of API responses.",
+			Help:      "Number of API responses.",
 		},
-		[]string{"status_code"},
+		[]string{"code"},
 	)
 
-	apiUserSignupsMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	apiUserSignupsCompletedMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
-			Name:      "api_user_signups",
-			Help:      "Total number of API user signups.",
+			Name:      "api_user_signups_completed",
+			Help:      "Number of API User Signups completed.",
 		},
-		[]string{"state"},
 	)
 
-	pageResponsesMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	apiUserSignupsInviteMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_user_signups_invite",
+			Help:      "Number of API User Signups invite.",
+		},
+	)
+
+	apiUserSignupsStartedMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_user_signups_started",
+			Help:      "Number of API User Signups started.",
+		},
+	)
+
+	awsCloudwatchGetMetricStatisticsMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "aws_cloudwatch_get_metric_statistics",
+			Help:      "Number of calls to AWS CloudWatch Get Metric Statistics API.",
+		},
+	)
+
+	awsCloudwatchListMetricsMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "aws_cloudwatch_list_metrics",
+			Help:      "Number of calls to AWS CloudWatch List Metrics API.",
+		},
+	)
+
+	instanceStartMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "instance_start",
+			Help:      "Number of Instance Starts.",
+		},
+	)
+
+	modelsDashboardInsertMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "models_dashboard_insert",
+			Help:      "Number of Dashboard inserts.",
+		},
+	)
+
+	pageResponsesMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
 			Name:      "page_responses",
-			Help:      "Total number of Page responses.",
+			Help:      "Number of Page responses.",
 		},
-		[]string{"status_code"},
+		[]string{"code"},
 	)
 
-	proxyResponsesMetric := prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	proxyResponsesMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Namespace: "grafana",
 			Subsystem: "metrics",
 			Name:      "proxy_responses",
-			Help:      "Total number of Proxy responses.",
+			Help:      "Number of Proxy responses.",
 		},
-		[]string{"status_code"},
+		[]string{"code"},
 	)
 
 	dashboardsMetric := prometheus.NewGauge(
@@ -181,23 +310,36 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 	)
 
 	metricsCollector := &MetricsCollector{
-		grafanaClient:                   grafanaClient,
-		alertingActiveAlertsMetric:      alertingActiveAlertsMetric,
-		alertingNotificationsSentMetric: alertingNotificationsSentMetric,
-		alertingResultsMetric:           alertingResultsMetric,
-		apiResponsesMetric:              apiResponsesMetric,
-		apiUserSignupsMetric:            apiUserSignupsMetric,
-		pageResponsesMetric:             pageResponsesMetric,
-		proxyResponsesMetric:            proxyResponsesMetric,
-		dashboardsMetric:                dashboardsMetric,
-		orgsMetric:                      orgsMetric,
-		playlistsMetric:                 playlistsMetric,
-		usersMetric:                     usersMetric,
-		scrapesTotalMetric:              scrapesTotalMetric,
-		scrapeErrorsTotalMetric:         scrapeErrorsTotalMetric,
-		lastScrapeErrorMetric:           lastScrapeErrorMetric,
-		lastScrapeTimestampMetric:       lastScrapeTimestampMetric,
-		lastScrapeDurationSecondsMetric: lastScrapeDurationSecondsMetric,
+		grafanaClient:                          grafanaClient,
+		alertingActiveAlertsMetric:             alertingActiveAlertsMetric,
+		alertingNotificationsSentMetric:        alertingNotificationsSentMetric,
+		alertingResultsMetric:                  alertingResultsMetric,
+		apiAdminUserCreateMetric:               apiAdminUserCreateMetric,
+		apiDashboardSnapshotCreateMetric:       apiDashboardSnapshotCreateMetric,
+		apiDashboardSnapshotExternalMetric:     apiDashboardSnapshotExternalMetric,
+		apiDashboardSnapshotGetMetric:          apiDashboardSnapshotGetMetric,
+		apiLoginOauthMetric:                    apiLoginOauthMetric,
+		apiLoginPostMetric:                     apiLoginPostMetric,
+		apiOrgCreateMetric:                     apiOrgCreateMetric,
+		apiResponsesMetric:                     apiResponsesMetric,
+		apiUserSignupsCompletedMetric:          apiUserSignupsCompletedMetric,
+		apiUserSignupsInviteMetric:             apiUserSignupsInviteMetric,
+		apiUserSignupsStartedMetric:            apiUserSignupsStartedMetric,
+		awsCloudwatchGetMetricStatisticsMetric: awsCloudwatchGetMetricStatisticsMetric,
+		awsCloudwatchListMetricsMetric:         awsCloudwatchListMetricsMetric,
+		instanceStartMetric:                    instanceStartMetric,
+		modelsDashboardInsertMetric:            modelsDashboardInsertMetric,
+		pageResponsesMetric:                    pageResponsesMetric,
+		proxyResponsesMetric:                   proxyResponsesMetric,
+		dashboardsMetric:                       dashboardsMetric,
+		orgsMetric:                             orgsMetric,
+		playlistsMetric:                        playlistsMetric,
+		usersMetric:                            usersMetric,
+		scrapesTotalMetric:                     scrapesTotalMetric,
+		scrapeErrorsTotalMetric:                scrapeErrorsTotalMetric,
+		lastScrapeErrorMetric:                  lastScrapeErrorMetric,
+		lastScrapeTimestampMetric:              lastScrapeTimestampMetric,
+		lastScrapeDurationSecondsMetric:        lastScrapeDurationSecondsMetric,
 	}
 
 	return metricsCollector
@@ -207,8 +349,21 @@ func (c *MetricsCollector) Describe(ch chan<- *prometheus.Desc) {
 	c.alertingActiveAlertsMetric.Describe(ch)
 	c.alertingNotificationsSentMetric.Describe(ch)
 	c.alertingResultsMetric.Describe(ch)
+	c.apiAdminUserCreateMetric.Describe(ch)
+	c.apiDashboardSnapshotCreateMetric.Describe(ch)
+	c.apiDashboardSnapshotExternalMetric.Describe(ch)
+	c.apiDashboardSnapshotGetMetric.Describe(ch)
+	c.apiLoginOauthMetric.Describe(ch)
+	c.apiLoginPostMetric.Describe(ch)
+	c.apiOrgCreateMetric.Describe(ch)
 	c.apiResponsesMetric.Describe(ch)
-	c.apiUserSignupsMetric.Describe(ch)
+	c.apiUserSignupsCompletedMetric.Describe(ch)
+	c.apiUserSignupsInviteMetric.Describe(ch)
+	c.apiUserSignupsStartedMetric.Describe(ch)
+	c.awsCloudwatchGetMetricStatisticsMetric.Describe(ch)
+	c.awsCloudwatchListMetricsMetric.Describe(ch)
+	c.instanceStartMetric.Describe(ch)
+	c.modelsDashboardInsertMetric.Describe(ch)
 	c.pageResponsesMetric.Describe(ch)
 	c.proxyResponsesMetric.Describe(ch)
 	c.dashboardsMetric.Describe(ch)
@@ -255,53 +410,85 @@ func (c *MetricsCollector) reportMetrics(ch chan<- prometheus.Metric) error {
 	c.alertingActiveAlertsMetric.Set(float64(metrics.AlertingActiveAlerts.Value))
 	c.alertingActiveAlertsMetric.Collect(ch)
 
-	c.alertingNotificationsSentMetric.Reset()
-	c.alertingNotificationsSentMetric.WithLabelValues("line").Add(float64(metrics.AlertingNotificationsSentLine.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("email").Add(float64(metrics.AlertingNotificationsSentEmail.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("opsgenie").Add(float64(metrics.AlertingNotificationsSentOpsgenie.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("pagerduty").Add(float64(metrics.AlertingNotificationsSentPagerduty.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("pushover").Add(float64(metrics.AlertingNotificationsSentPushover.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("sensu").Add(float64(metrics.AlertingNotificationsSentSensu.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("slack").Add(float64(metrics.AlertingNotificationsSentSlack.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("telegram").Add(float64(metrics.AlertingNotificationsSentTelegram.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("threema").Add(float64(metrics.AlertingNotificationsSentThreema.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("victorops").Add(float64(metrics.AlertingNotificationsSentVictorops.Count))
-	c.alertingNotificationsSentMetric.WithLabelValues("webhook").Add(float64(metrics.AlertingNotificationsSentWebhook.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("line").Set(float64(metrics.AlertingNotificationsSentLine.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("dingding").Set(float64(metrics.AlertingNotificationsSentDingDing.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("email").Set(float64(metrics.AlertingNotificationsSentEmail.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("opsgenie").Set(float64(metrics.AlertingNotificationsSentOpsgenie.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("pagerduty").Set(float64(metrics.AlertingNotificationsSentPagerduty.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("pushover").Set(float64(metrics.AlertingNotificationsSentPushover.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("sensu").Set(float64(metrics.AlertingNotificationsSentSensu.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("slack").Set(float64(metrics.AlertingNotificationsSentSlack.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("telegram").Set(float64(metrics.AlertingNotificationsSentTelegram.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("threema").Set(float64(metrics.AlertingNotificationsSentThreema.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("victorops").Set(float64(metrics.AlertingNotificationsSentVictorops.Count))
+	c.alertingNotificationsSentMetric.WithLabelValues("webhook").Set(float64(metrics.AlertingNotificationsSentWebhook.Count))
 	c.alertingNotificationsSentMetric.Collect(ch)
 
-	c.alertingResultsMetric.Reset()
-	c.alertingResultsMetric.WithLabelValues("alerting").Add(float64(metrics.AlertingResultStateAlerting.Count))
-	c.alertingResultsMetric.WithLabelValues("no_data").Add(float64(metrics.AlertingResultStateNoData.Count))
-	c.alertingResultsMetric.WithLabelValues("ok").Add(float64(metrics.AlertingResultStateOk.Count))
-	c.alertingResultsMetric.WithLabelValues("paused").Add(float64(metrics.AlertingResultStatePaused.Count))
-	c.alertingResultsMetric.WithLabelValues("pending").Add(float64(metrics.AlertingResultStatePending.Count))
+	c.alertingResultsMetric.WithLabelValues("alerting").Set(float64(metrics.AlertingResultStateAlerting.Count))
+	c.alertingResultsMetric.WithLabelValues("no_data").Set(float64(metrics.AlertingResultStateNoData.Count))
+	c.alertingResultsMetric.WithLabelValues("ok").Set(float64(metrics.AlertingResultStateOk.Count))
+	c.alertingResultsMetric.WithLabelValues("paused").Set(float64(metrics.AlertingResultStatePaused.Count))
+	c.alertingResultsMetric.WithLabelValues("pending").Set(float64(metrics.AlertingResultStatePending.Count))
 	c.alertingResultsMetric.Collect(ch)
 
-	c.apiResponsesMetric.Reset()
-	c.apiResponsesMetric.WithLabelValues("200").Add(float64(metrics.APIRespStatusCode200.Count))
-	c.apiResponsesMetric.WithLabelValues("404").Add(float64(metrics.APIRespStatusCode404.Count))
-	c.apiResponsesMetric.WithLabelValues("500").Add(float64(metrics.APIRespStatusCode500.Count))
-	c.apiResponsesMetric.WithLabelValues("unknown").Add(float64(metrics.APIRespStatusCodeUnknown.Count))
+	c.apiAdminUserCreateMetric.Set(float64(metrics.APIAdminUserCreate.Count))
+	c.apiAdminUserCreateMetric.Collect(ch)
+
+	c.apiDashboardSnapshotCreateMetric.Set(float64(metrics.APIDashboardSnapshotCreate.Count))
+	c.apiDashboardSnapshotCreateMetric.Collect(ch)
+
+	c.apiDashboardSnapshotExternalMetric.Set(float64(metrics.APIDashboardSnapshotExternal.Count))
+	c.apiDashboardSnapshotExternalMetric.Collect(ch)
+
+	c.apiDashboardSnapshotGetMetric.Set(float64(metrics.APIDashboardSnapshotGet.Count))
+	c.apiDashboardSnapshotGetMetric.Collect(ch)
+
+	c.apiLoginOauthMetric.Set(float64(metrics.APILoginOauth.Count))
+	c.apiLoginOauthMetric.Collect(ch)
+
+	c.apiLoginPostMetric.Set(float64(metrics.APILoginPost.Count))
+	c.apiLoginPostMetric.Collect(ch)
+
+	c.apiOrgCreateMetric.Set(float64(metrics.APIOrgCreate.Count))
+	c.apiOrgCreateMetric.Collect(ch)
+
+	c.apiResponsesMetric.WithLabelValues("200").Set(float64(metrics.APIRespStatusCode200.Count))
+	c.apiResponsesMetric.WithLabelValues("404").Set(float64(metrics.APIRespStatusCode404.Count))
+	c.apiResponsesMetric.WithLabelValues("500").Set(float64(metrics.APIRespStatusCode500.Count))
+	c.apiResponsesMetric.WithLabelValues("unknown").Set(float64(metrics.APIRespStatusCodeUnknown.Count))
 	c.apiResponsesMetric.Collect(ch)
 
-	c.apiUserSignupsMetric.Reset()
-	c.apiUserSignupsMetric.WithLabelValues("completed").Add(float64(metrics.APIUserSignupCompleted.Count))
-	c.apiUserSignupsMetric.WithLabelValues("invite").Add(float64(metrics.APIUserSignupInvite.Count))
-	c.apiUserSignupsMetric.WithLabelValues("started").Add(float64(metrics.APIUserSignupStarted.Count))
-	c.apiUserSignupsMetric.Collect(ch)
+	c.apiUserSignupsCompletedMetric.Set(float64(metrics.APIUserSignupCompleted.Count))
+	c.apiUserSignupsCompletedMetric.Collect(ch)
 
-	c.pageResponsesMetric.Reset()
-	c.pageResponsesMetric.WithLabelValues("200").Add(float64(metrics.PageRespStatusCode200.Count))
-	c.pageResponsesMetric.WithLabelValues("404").Add(float64(metrics.PageRespStatusCode404.Count))
-	c.pageResponsesMetric.WithLabelValues("500").Add(float64(metrics.PageRespStatusCode500.Count))
-	c.pageResponsesMetric.WithLabelValues("unknown").Add(float64(metrics.PageRespStatusCodeUnknown.Count))
+	c.apiUserSignupsInviteMetric.Set(float64(metrics.APIUserSignupInvite.Count))
+	c.apiUserSignupsInviteMetric.Collect(ch)
+
+	c.apiUserSignupsStartedMetric.Set(float64(metrics.APIUserSignupStarted.Count))
+	c.apiUserSignupsStartedMetric.Collect(ch)
+
+	c.awsCloudwatchGetMetricStatisticsMetric.Set(float64(metrics.AWSCloudwatchGetMetricStatistics.Count))
+	c.awsCloudwatchGetMetricStatisticsMetric.Collect(ch)
+
+	c.awsCloudwatchListMetricsMetric.Set(float64(metrics.AWSCloudwatchListMetrics.Count))
+	c.awsCloudwatchListMetricsMetric.Collect(ch)
+
+	c.instanceStartMetric.Set(float64(metrics.InstanceStart.Count))
+	c.instanceStartMetric.Collect(ch)
+
+	c.modelsDashboardInsertMetric.Set(float64(metrics.ModelsDashboardInsert.Count))
+	c.modelsDashboardInsertMetric.Collect(ch)
+
+	c.pageResponsesMetric.WithLabelValues("200").Set(float64(metrics.PageRespStatusCode200.Count))
+	c.pageResponsesMetric.WithLabelValues("404").Set(float64(metrics.PageRespStatusCode404.Count))
+	c.pageResponsesMetric.WithLabelValues("500").Set(float64(metrics.PageRespStatusCode500.Count))
+	c.pageResponsesMetric.WithLabelValues("unknown").Set(float64(metrics.PageRespStatusCodeUnknown.Count))
 	c.pageResponsesMetric.Collect(ch)
 
-	c.proxyResponsesMetric.Reset()
-	c.proxyResponsesMetric.WithLabelValues("200").Add(float64(metrics.ProxyRespStatusCode200.Count))
-	c.proxyResponsesMetric.WithLabelValues("404").Add(float64(metrics.ProxyRespStatusCode404.Count))
-	c.proxyResponsesMetric.WithLabelValues("500").Add(float64(metrics.ProxyRespStatusCode500.Count))
-	c.proxyResponsesMetric.WithLabelValues("unknown").Add(float64(metrics.ProxyRespStatusCodeUnknown.Count))
+	c.proxyResponsesMetric.WithLabelValues("200").Set(float64(metrics.ProxyRespStatusCode200.Count))
+	c.proxyResponsesMetric.WithLabelValues("404").Set(float64(metrics.ProxyRespStatusCode404.Count))
+	c.proxyResponsesMetric.WithLabelValues("500").Set(float64(metrics.ProxyRespStatusCode500.Count))
+	c.proxyResponsesMetric.WithLabelValues("unknown").Set(float64(metrics.ProxyRespStatusCodeUnknown.Count))
 	c.proxyResponsesMetric.Collect(ch)
 
 	c.dashboardsMetric.Set(float64(metrics.StatsTotalsStatDashboards.Value))

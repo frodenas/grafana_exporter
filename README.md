@@ -86,12 +86,25 @@ The exporter returns the following Grafana Metrics:
 | Metric | Description | Labels |
 | ------ | ----------- | ------ |
 | `grafana_metrics_alerting_active_alerts` | Number of active alerts | |
-| `grafana_metrics_alerting_notifications_sent` | Total number of alert notifications sent | `type` |
-| `grafana_metrics_alerting_results` | Total number of alerting results | `state` |
-| `grafana_metrics_api_responses` | Total number of API responses | `status_code` |
-| `grafana_metrics_api_user_signup` | Total number of API user signups | `state` |
-| `grafana_metrics_page_responses` | Total number of Page responses | `status_code` |
-| `grafana_metrics_proxy_responses` | Total number of Proxy responses | `status_code` |
+| `grafana_metrics_alerting_notifications_sent` | Number of alert notifications sent | `type` |
+| `grafana_metrics_alerting_results` | Number of alerting results | `state` |
+| `grafana_metrics_api_admin_user_create` | Number of calls to Admin User Create API | |
+| `grafana_metrics_api_dashboard_snapshot_create` | Number of calls to Dashboard Snapshot Create API | |
+| `grafana_metrics_api_dashboard_snapshot_external` | Number of calls to Dashboard Snapshot External API | |
+| `grafana_metrics_api_dashboard_snapshot_get` | Number of calls to Dashboard Snapshot Get API | |
+| `grafana_metrics_api_login_oauth` | Number of calls to Login OAuth API | |
+| `grafana_metrics_api_login_post` | Number of calls to Login Post API | |
+| `grafana_metrics_api_org_create` | Number of calls to Org Create API | |
+| `grafana_metrics_api_responses` | Number of API responses | `code` |
+| `grafana_metrics_api_user_signups_completed` | Number of API User Signups completed | |
+| `grafana_metrics_api_user_signups_invite` | Number of API User Signups invite | |
+| `grafana_metrics_api_user_signups_started` | Number of API User Signups started | |
+| `grafana_metrics_aws_cloudwatch_get_metric_statistics` | Number of calls to AWS CloudWatch Get Metric Statistics API | |
+| `grafana_metrics_aws_cloudwatch_list_metric` | Number of calls to AWS CloudWatch List Metrics API | |
+| `grafana_metrics_instance_start` | Number of Instance Starts | |
+| `grafana_metrics_models_dashboard_insert` | Number of Dashboard inserts | |
+| `grafana_metrics_page_responses` | Number of Page responses | `code` |
+| `grafana_metrics_proxy_responses` | Number of Proxy responses | `code` |
 | `grafana_metrics_dashboards` | Number of dashboards | |
 | `grafana_metrics_orgs` | Number of orgs | |
 | `grafana_metrics_playlists` | Number of playlists | |

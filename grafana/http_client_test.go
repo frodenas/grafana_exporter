@@ -110,53 +110,56 @@ var _ = Describe("HTTPClient", func() {
 					P99:   float64(3.5),
 					Std:   float64(3.6),
 				},
-				AlertingNotificationsSentEmail: Counter{
+				AlertingNotificationsSentDingDing: Counter{
 					Count: int64(3),
 				},
-				AlertingNotificationsSentOpsgenie: Counter{
+				AlertingNotificationsSentEmail: Counter{
 					Count: int64(4),
 				},
-				AlertingNotificationsSentPagerduty: Counter{
+				AlertingNotificationsSentOpsgenie: Counter{
 					Count: int64(5),
 				},
-				AlertingNotificationsSentPushover: Counter{
+				AlertingNotificationsSentPagerduty: Counter{
 					Count: int64(6),
 				},
-				AlertingNotificationsSentSensu: Counter{
+				AlertingNotificationsSentPushover: Counter{
 					Count: int64(7),
 				},
-				AlertingNotificationsSentSlack: Counter{
+				AlertingNotificationsSentSensu: Counter{
 					Count: int64(8),
 				},
-				AlertingNotificationsSentTelegram: Counter{
+				AlertingNotificationsSentSlack: Counter{
 					Count: int64(9),
 				},
-				AlertingNotificationsSentThreema: Counter{
+				AlertingNotificationsSentTelegram: Counter{
 					Count: int64(10),
 				},
-				AlertingNotificationsSentVictorops: Counter{
+				AlertingNotificationsSentThreema: Counter{
 					Count: int64(11),
 				},
-				AlertingNotificationsSentWebhook: Counter{
+				AlertingNotificationsSentVictorops: Counter{
 					Count: int64(12),
 				},
-				AlertingResultStateAlerting: Counter{
+				AlertingNotificationsSentWebhook: Counter{
 					Count: int64(13),
 				},
-				AlertingResultStateNoData: Counter{
+				AlertingResultStateAlerting: Counter{
 					Count: int64(14),
 				},
-				AlertingResultStateOk: Counter{
+				AlertingResultStateNoData: Counter{
 					Count: int64(15),
 				},
-				AlertingResultStatePaused: Counter{
+				AlertingResultStateOk: Counter{
 					Count: int64(16),
 				},
-				AlertingResultStatePending: Counter{
+				AlertingResultStatePaused: Counter{
 					Count: int64(17),
 				},
-				APIAdminUserCreate: Counter{
+				AlertingResultStatePending: Counter{
 					Count: int64(18),
+				},
+				APIAdminUserCreate: Counter{
+					Count: int64(19),
 				},
 				APIDashboardGet: Timer{
 					Count: int64(1),
@@ -192,13 +195,13 @@ var _ = Describe("HTTPClient", func() {
 					Std:   float64(3.6),
 				},
 				APIDashboardSnapshotCreate: Counter{
-					Count: int64(19),
-				},
-				APIDashboardSnapshotExternal: Counter{
 					Count: int64(20),
 				},
-				APIDashboardSnapshotGet: Counter{
+				APIDashboardSnapshotExternal: Counter{
 					Count: int64(21),
+				},
+				APIDashboardSnapshotGet: Counter{
+					Count: int64(22),
 				},
 				APIDataproxyRequestAll: Timer{
 					Count: int64(1),
@@ -212,82 +215,82 @@ var _ = Describe("HTTPClient", func() {
 					Std:   float64(3.6),
 				},
 				APILoginOauth: Counter{
-					Count: int64(22),
-				},
-				APILoginPost: Counter{
 					Count: int64(23),
 				},
-				APIOrgCreate: Counter{
+				APILoginPost: Counter{
 					Count: int64(24),
 				},
-				APIRespStatusCode200: Counter{
+				APIOrgCreate: Counter{
 					Count: int64(25),
 				},
-				APIRespStatusCode404: Counter{
+				APIRespStatusCode200: Counter{
 					Count: int64(26),
 				},
-				APIRespStatusCode500: Counter{
+				APIRespStatusCode404: Counter{
 					Count: int64(27),
 				},
-				APIRespStatusCodeUnknown: Counter{
+				APIRespStatusCode500: Counter{
 					Count: int64(28),
 				},
-				APIUserSignupCompleted: Counter{
+				APIRespStatusCodeUnknown: Counter{
 					Count: int64(29),
 				},
-				APIUserSignupInvite: Counter{
+				APIUserSignupCompleted: Counter{
 					Count: int64(30),
 				},
-				APIUserSignupStarted: Counter{
+				APIUserSignupInvite: Counter{
 					Count: int64(31),
 				},
-				AWSCloudwatchGetMetricStatistics: Counter{
+				APIUserSignupStarted: Counter{
 					Count: int64(32),
 				},
-				AWSCloudwatchListMetrics: Counter{
+				AWSCloudwatchGetMetricStatistics: Counter{
 					Count: int64(33),
 				},
-				InstanceStart: Counter{
+				AWSCloudwatchListMetrics: Counter{
 					Count: int64(34),
 				},
-				ModelsDashboardInsert: Counter{
+				InstanceStart: Counter{
 					Count: int64(35),
 				},
-				PageRespStatusCode200: Counter{
+				ModelsDashboardInsert: Counter{
 					Count: int64(36),
 				},
-				PageRespStatusCode404: Counter{
+				PageRespStatusCode200: Counter{
 					Count: int64(37),
 				},
-				PageRespStatusCode500: Counter{
+				PageRespStatusCode404: Counter{
 					Count: int64(38),
 				},
-				PageRespStatusCodeUnknown: Counter{
+				PageRespStatusCode500: Counter{
 					Count: int64(39),
 				},
-				ProxyRespStatusCode200: Counter{
+				PageRespStatusCodeUnknown: Counter{
 					Count: int64(40),
 				},
-				ProxyRespStatusCode404: Counter{
+				ProxyRespStatusCode200: Counter{
 					Count: int64(41),
 				},
-				ProxyRespStatusCode500: Counter{
+				ProxyRespStatusCode404: Counter{
 					Count: int64(42),
 				},
-				ProxyRespStatusCodeUnknown: Counter{
+				ProxyRespStatusCode500: Counter{
 					Count: int64(43),
 				},
-				StatsTotalsStatDashboards: Gauge{
-					Value: int64(44),
+				ProxyRespStatusCodeUnknown: Counter{
+					Count: int64(44),
 				},
-				StatsTotalsStatOrgs: Gauge{
+				StatsTotalsStatDashboards: Gauge{
 					Value: int64(45),
 				},
-				StatsTotalsStatPlaylists: Gauge{
+				StatsTotalsStatOrgs: Gauge{
 					Value: int64(46),
 				},
-				StatsTotalsStatUsers: Gauge{
+				StatsTotalsStatPlaylists: Gauge{
 					Value: int64(47),
+				},
+				StatsTotalsStatUsers: Gauge{
+					Value: int64(48),
 				},
 			}
 

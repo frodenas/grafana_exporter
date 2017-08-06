@@ -21,6 +21,7 @@ type Metrics struct {
 	AlertingActiveAlerts               Gauge   `json:"alerting.active_alerts"`
 	AlertingExecutionTime              Timer   `json:"alerting.execution_time"`
 	AlertingNotificationsSentLine      Counter `json:"alerting.notifications_sent.type_LINE"`
+	AlertingNotificationsSentDingDing  Counter `json:"alerting.notifications_sent.type_dingding"`
 	AlertingNotificationsSentEmail     Counter `json:"alerting.notifications_sent.type_email"`
 	AlertingNotificationsSentOpsgenie  Counter `json:"alerting.notifications_sent.type_opsgenie"`
 	AlertingNotificationsSentPagerduty Counter `json:"alerting.notifications_sent.type_pagerduty"`
