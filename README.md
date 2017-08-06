@@ -73,7 +73,7 @@ The exporter returns the following [Admin Stats][admin-stats] metrics:
 | `grafana_admin_stats_orgs` | Number of Grafana Orgs | |
 | `grafana_admin_stats_playlists` | Number of Grafana Playlists | |
 | `grafana_admin_stats_db_snapshots` | Number of Grafana Snapshots | |
-| `grafana_admin_stats_starred_db_total` | Number of Grafana Dashboards Starred | |
+| `grafana_admin_stats_starred_db` | Number of Grafana Dashboards Starred | |
 | `grafana_admin_stats_db_tags` | Number of Grafana Tags | |
 | `grafana_admin_stats_users` | Number of Grafana Admin Stats scrapes | |
 | `grafana_admin_stats_scrape_errors_total` | Total number of Grafana Admin Stats scrape errors | |
