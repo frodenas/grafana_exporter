@@ -12,12 +12,17 @@ import (
 type MetricsCollector struct {
 	grafanaClient                          grafana.Client
 	alertingActiveAlertsMetric             prometheus.Gauge
+	alertingExecutionTimeMetric            *prometheus.GaugeVec
 	alertingNotificationsSentMetric        *prometheus.GaugeVec
 	alertingResultsMetric                  *prometheus.GaugeVec
 	apiAdminUserCreateMetric               prometheus.Gauge
+	apiDashboardGetMetric                  *prometheus.GaugeVec
+	apiDashboardSaveMetric                 *prometheus.GaugeVec
+	apiDashboardSearchMetric               *prometheus.GaugeVec
 	apiDashboardSnapshotCreateMetric       prometheus.Gauge
 	apiDashboardSnapshotExternalMetric     prometheus.Gauge
 	apiDashboardSnapshotGetMetric          prometheus.Gauge
+	apiDataproxyRequestAllMetric           *prometheus.GaugeVec
 	apiLoginOauthMetric                    prometheus.Gauge
 	apiLoginPostMetric                     prometheus.Gauge
 	apiOrgCreateMetric                     prometheus.Gauge
@@ -52,6 +57,16 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 		},
 	)
 
+	alertingExecutionTimeMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "alerting_execution_time",
+			Help:      "Alerting execution time.",
+		},
+		[]string{"metric"},
+	)
+
 	alertingNotificationsSentMetric := prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
@@ -81,6 +96,36 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 		},
 	)
 
+	apiDashboardGetMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_get",
+			Help:      "Dashboard Get API times.",
+		},
+		[]string{"metric"},
+	)
+
+	apiDashboardSaveMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_save",
+			Help:      "Dashboard Save API times.",
+		},
+		[]string{"metric"},
+	)
+
+	apiDashboardSearchMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dashboard_search",
+			Help:      "Dashboard Search API times.",
+		},
+		[]string{"metric"},
+	)
+
 	apiDashboardSnapshotCreateMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "grafana",
@@ -106,6 +151,16 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 			Name:      "api_dashboard_snapshot_get",
 			Help:      "Number of calls to Dashboard Snapshot Get API.",
 		},
+	)
+
+	apiDataproxyRequestAllMetric := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "grafana",
+			Subsystem: "metrics",
+			Name:      "api_dataproxy_request_all",
+			Help:      "Dataproxy request API times.",
+		},
+		[]string{"metric"},
 	)
 
 	apiLoginOauthMetric := prometheus.NewGauge(
@@ -312,12 +367,17 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 	metricsCollector := &MetricsCollector{
 		grafanaClient:                          grafanaClient,
 		alertingActiveAlertsMetric:             alertingActiveAlertsMetric,
+		alertingExecutionTimeMetric:            alertingExecutionTimeMetric,
 		alertingNotificationsSentMetric:        alertingNotificationsSentMetric,
 		alertingResultsMetric:                  alertingResultsMetric,
 		apiAdminUserCreateMetric:               apiAdminUserCreateMetric,
+		apiDashboardGetMetric:                  apiDashboardGetMetric,
+		apiDashboardSaveMetric:                 apiDashboardSaveMetric,
+		apiDashboardSearchMetric:               apiDashboardSearchMetric,
 		apiDashboardSnapshotCreateMetric:       apiDashboardSnapshotCreateMetric,
 		apiDashboardSnapshotExternalMetric:     apiDashboardSnapshotExternalMetric,
 		apiDashboardSnapshotGetMetric:          apiDashboardSnapshotGetMetric,
+		apiDataproxyRequestAllMetric:           apiDataproxyRequestAllMetric,
 		apiLoginOauthMetric:                    apiLoginOauthMetric,
 		apiLoginPostMetric:                     apiLoginPostMetric,
 		apiOrgCreateMetric:                     apiOrgCreateMetric,
@@ -347,12 +407,17 @@ func NewMetricsCollector(grafanaClient grafana.Client) *MetricsCollector {
 
 func (c *MetricsCollector) Describe(ch chan<- *prometheus.Desc) {
 	c.alertingActiveAlertsMetric.Describe(ch)
+	c.alertingExecutionTimeMetric.Describe(ch)
 	c.alertingNotificationsSentMetric.Describe(ch)
 	c.alertingResultsMetric.Describe(ch)
 	c.apiAdminUserCreateMetric.Describe(ch)
+	c.apiDashboardGetMetric.Describe(ch)
+	c.apiDashboardSaveMetric.Describe(ch)
+	c.apiDashboardSearchMetric.Describe(ch)
 	c.apiDashboardSnapshotCreateMetric.Describe(ch)
 	c.apiDashboardSnapshotExternalMetric.Describe(ch)
 	c.apiDashboardSnapshotGetMetric.Describe(ch)
+	c.apiDataproxyRequestAllMetric.Describe(ch)
 	c.apiLoginOauthMetric.Describe(ch)
 	c.apiLoginPostMetric.Describe(ch)
 	c.apiOrgCreateMetric.Describe(ch)
@@ -410,6 +475,17 @@ func (c *MetricsCollector) reportMetrics(ch chan<- prometheus.Metric) error {
 	c.alertingActiveAlertsMetric.Set(float64(metrics.AlertingActiveAlerts.Value))
 	c.alertingActiveAlertsMetric.Collect(ch)
 
+	c.alertingExecutionTimeMetric.WithLabelValues("count").Set(float64(metrics.AlertingExecutionTime.Count))
+	c.alertingExecutionTimeMetric.WithLabelValues("max").Set(float64(metrics.AlertingExecutionTime.Max))
+	c.alertingExecutionTimeMetric.WithLabelValues("mean").Set(metrics.AlertingExecutionTime.Mean)
+	c.alertingExecutionTimeMetric.WithLabelValues("min").Set(float64(metrics.AlertingExecutionTime.Min))
+	c.alertingExecutionTimeMetric.WithLabelValues("p25").Set(metrics.AlertingExecutionTime.P25)
+	c.alertingExecutionTimeMetric.WithLabelValues("p75").Set(metrics.AlertingExecutionTime.P75)
+	c.alertingExecutionTimeMetric.WithLabelValues("p90").Set(metrics.AlertingExecutionTime.P90)
+	c.alertingExecutionTimeMetric.WithLabelValues("p99").Set(metrics.AlertingExecutionTime.P99)
+	c.alertingExecutionTimeMetric.WithLabelValues("std").Set(metrics.AlertingExecutionTime.Std)
+	c.alertingExecutionTimeMetric.Collect(ch)
+
 	c.alertingNotificationsSentMetric.WithLabelValues("line").Set(float64(metrics.AlertingNotificationsSentLine.Count))
 	c.alertingNotificationsSentMetric.WithLabelValues("dingding").Set(float64(metrics.AlertingNotificationsSentDingDing.Count))
 	c.alertingNotificationsSentMetric.WithLabelValues("email").Set(float64(metrics.AlertingNotificationsSentEmail.Count))
@@ -434,6 +510,39 @@ func (c *MetricsCollector) reportMetrics(ch chan<- prometheus.Metric) error {
 	c.apiAdminUserCreateMetric.Set(float64(metrics.APIAdminUserCreate.Count))
 	c.apiAdminUserCreateMetric.Collect(ch)
 
+	c.apiDashboardGetMetric.WithLabelValues("count").Set(float64(metrics.APIDashboardGet.Count))
+	c.apiDashboardGetMetric.WithLabelValues("max").Set(float64(metrics.APIDashboardGet.Max))
+	c.apiDashboardGetMetric.WithLabelValues("mean").Set(metrics.APIDashboardGet.Mean)
+	c.apiDashboardGetMetric.WithLabelValues("min").Set(float64(metrics.APIDashboardGet.Min))
+	c.apiDashboardGetMetric.WithLabelValues("p25").Set(metrics.APIDashboardGet.P25)
+	c.apiDashboardGetMetric.WithLabelValues("p75").Set(metrics.APIDashboardGet.P75)
+	c.apiDashboardGetMetric.WithLabelValues("p90").Set(metrics.APIDashboardGet.P90)
+	c.apiDashboardGetMetric.WithLabelValues("p99").Set(metrics.APIDashboardGet.P99)
+	c.apiDashboardGetMetric.WithLabelValues("std").Set(metrics.APIDashboardGet.Std)
+	c.apiDashboardGetMetric.Collect(ch)
+
+	c.apiDashboardSaveMetric.WithLabelValues("count").Set(float64(metrics.APIDashboardSave.Count))
+	c.apiDashboardSaveMetric.WithLabelValues("max").Set(float64(metrics.APIDashboardSave.Max))
+	c.apiDashboardSaveMetric.WithLabelValues("mean").Set(metrics.APIDashboardSave.Mean)
+	c.apiDashboardSaveMetric.WithLabelValues("min").Set(float64(metrics.APIDashboardSave.Min))
+	c.apiDashboardSaveMetric.WithLabelValues("p25").Set(metrics.APIDashboardSave.P25)
+	c.apiDashboardSaveMetric.WithLabelValues("p75").Set(metrics.APIDashboardSave.P75)
+	c.apiDashboardSaveMetric.WithLabelValues("p90").Set(metrics.APIDashboardSave.P90)
+	c.apiDashboardSaveMetric.WithLabelValues("p99").Set(metrics.APIDashboardSave.P99)
+	c.apiDashboardSaveMetric.WithLabelValues("std").Set(metrics.APIDashboardSave.Std)
+	c.apiDashboardSaveMetric.Collect(ch)
+
+	c.apiDashboardSearchMetric.WithLabelValues("count").Set(float64(metrics.APIDashboardSearch.Count))
+	c.apiDashboardSearchMetric.WithLabelValues("max").Set(float64(metrics.APIDashboardSearch.Max))
+	c.apiDashboardSearchMetric.WithLabelValues("mean").Set(metrics.APIDashboardSearch.Mean)
+	c.apiDashboardSearchMetric.WithLabelValues("min").Set(float64(metrics.APIDashboardSearch.Min))
+	c.apiDashboardSearchMetric.WithLabelValues("p25").Set(metrics.APIDashboardSearch.P25)
+	c.apiDashboardSearchMetric.WithLabelValues("p75").Set(metrics.APIDashboardSearch.P75)
+	c.apiDashboardSearchMetric.WithLabelValues("p90").Set(metrics.APIDashboardSearch.P90)
+	c.apiDashboardSearchMetric.WithLabelValues("p99").Set(metrics.APIDashboardSearch.P99)
+	c.apiDashboardSearchMetric.WithLabelValues("std").Set(metrics.APIDashboardSearch.Std)
+	c.apiDashboardSearchMetric.Collect(ch)
+
 	c.apiDashboardSnapshotCreateMetric.Set(float64(metrics.APIDashboardSnapshotCreate.Count))
 	c.apiDashboardSnapshotCreateMetric.Collect(ch)
 
@@ -442,6 +551,17 @@ func (c *MetricsCollector) reportMetrics(ch chan<- prometheus.Metric) error {
 
 	c.apiDashboardSnapshotGetMetric.Set(float64(metrics.APIDashboardSnapshotGet.Count))
 	c.apiDashboardSnapshotGetMetric.Collect(ch)
+
+	c.apiDataproxyRequestAllMetric.WithLabelValues("count").Set(float64(metrics.APIDataproxyRequestAll.Count))
+	c.apiDataproxyRequestAllMetric.WithLabelValues("max").Set(float64(metrics.APIDataproxyRequestAll.Max))
+	c.apiDataproxyRequestAllMetric.WithLabelValues("mean").Set(metrics.APIDataproxyRequestAll.Mean)
+	c.apiDataproxyRequestAllMetric.WithLabelValues("min").Set(float64(metrics.APIDataproxyRequestAll.Min))
+	c.apiDataproxyRequestAllMetric.WithLabelValues("p25").Set(metrics.APIDataproxyRequestAll.P25)
+	c.apiDataproxyRequestAllMetric.WithLabelValues("p75").Set(metrics.APIDataproxyRequestAll.P75)
+	c.apiDataproxyRequestAllMetric.WithLabelValues("p90").Set(metrics.APIDataproxyRequestAll.P90)
+	c.apiDataproxyRequestAllMetric.WithLabelValues("p99").Set(metrics.APIDataproxyRequestAll.P99)
+	c.apiDataproxyRequestAllMetric.WithLabelValues("std").Set(metrics.APIDataproxyRequestAll.Std)
+	c.apiDataproxyRequestAllMetric.Collect(ch)
 
 	c.apiLoginOauthMetric.Set(float64(metrics.APILoginOauth.Count))
 	c.apiLoginOauthMetric.Collect(ch)

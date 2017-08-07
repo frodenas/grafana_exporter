@@ -86,12 +86,17 @@ The exporter returns the following Grafana Metrics:
 | Metric | Description | Labels |
 | ------ | ----------- | ------ |
 | `grafana_metrics_alerting_active_alerts` | Number of active alerts | |
+| `grafana_metrics_alerting_execution_time` | Alerting execution time | `metric` (`count`, `max`, `mean`, `min`, `p25`, `p75`, `p90`, `p99`, `std`) |
 | `grafana_metrics_alerting_notifications_sent` | Number of alert notifications sent | `type` |
 | `grafana_metrics_alerting_results` | Number of alerting results | `state` |
 | `grafana_metrics_api_admin_user_create` | Number of calls to Admin User Create API | |
+| `grafana_metrics_api_dashboard_get` | Dashboard Get API times | `metric` (`count`, `max`, `mean`, `min`, `p25`, `p75`, `p90`, `p99`, `std`) |
+| `grafana_metrics_api_dashboard_save` | Dashboard Save API times | `metric` (`count`, `max`, `mean`, `min`, `p25`, `p75`, `p90`, `p99`, `std`) |
+| `grafana_metrics_api_dashboard_search` | Dashboard Search API times | `metric` (`count`, `max`, `mean`, `min`, `p25`, `p75`, `p90`, `p99`, `std`) |
 | `grafana_metrics_api_dashboard_snapshot_create` | Number of calls to Dashboard Snapshot Create API | |
 | `grafana_metrics_api_dashboard_snapshot_external` | Number of calls to Dashboard Snapshot External API | |
 | `grafana_metrics_api_dashboard_snapshot_get` | Number of calls to Dashboard Snapshot Get API | |
+| `grafana_metrics_api_dataproxy_request_all` | Dataproxy request API times | `metric` (`count`, `max`, `mean`, `min`, `p25`, `p75`, `p90`, `p99`, `std`) |
 | `grafana_metrics_api_login_oauth` | Number of calls to Login OAuth API | |
 | `grafana_metrics_api_login_post` | Number of calls to Login Post API | |
 | `grafana_metrics_api_org_create` | Number of calls to Org Create API | |
