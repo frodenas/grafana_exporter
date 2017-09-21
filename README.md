@@ -2,6 +2,8 @@
 
 A [Prometheus][prometheus] exporter for [Grafana][grafana] metrics.
 
+*NOTE: starting at v4.5, [Grafana][grafana] already provides [prometheus](https://prometheus.io/) metrics at the `/metrics` endpoint, so using this exporter is not necessary anymore*
+
 ## Installation
 
 ### Binaries
